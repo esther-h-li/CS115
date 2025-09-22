@@ -5,14 +5,14 @@
 def get_user_input():
     """ Takes user input and returns it."""
 
-    print("Type in your action and press <Enter>:", end="")
+    print("Type in your action and press <Enter>: ")
     
     return input();
   
 
-def print_choices(a, b, c, mouse_, liquid_, moves, started):
-    """Prints choices for the user. Also checks the amounts of moves the user made to trigger a bad ending."""
-
+def checkMoves(a, b, c, mouse_, liquid_, moves, started):
+    """Also checks the amounts of moves the user made to trigger a bad ending."""
+    
     if( ((moves > 10) and liquid_) or (moves>20)):
         print("You've taken too long.")
         print("Thirst and hunger overtakes you.")
@@ -22,7 +22,7 @@ def print_choices(a, b, c, mouse_, liquid_, moves, started):
         print("BAD ENDING")
         print("\n\nPlay again..?")
         moves = 0
-        print_choices("Yes", "No", "Quit Game", mouse_, liquid_,moves, started)
+        print_choices("Yes", "No", "Quit Game")
         choiceFin = get_user_input()
         if (choiceFin == "a"):
             my_story()
@@ -30,7 +30,16 @@ def print_choices(a, b, c, mouse_, liquid_, moves, started):
             quit()
         
     else:
-        print("\na)" + a + "\n" + "b)" + b + "\n" +"c)" + c)
+        print_choices(a,b,c)
+
+def print_choices(a,b,c):
+    """Prints choices for the user"""
+    print("a) " + a)
+    print("b) " + b)
+    print("c) " + c)
+
+def checkvariables():
+    return mouse_, liquid_, moves, started
     
 def homeBase(mouse_, liquid_, moves, started):
     """Plays the first scene the user can encounter."""
@@ -41,8 +50,7 @@ def homeBase(mouse_, liquid_, moves, started):
         print("It's cold yet extremely humid. You spot something glowing from the corner of your eye")
     
     started = True
-    print_choices("Go back to sleep", "Investigate the glow", "Look for a way out", mouse_, liquid_, moves, started)
-    
+    checkMoves("Go back to sleep", "Investigate the glow", "Look for a way out", mouse_, liquid_, moves, started)
     choiceA = get_user_input()
     moves = moves + 1
     if(choiceA == "a"):
@@ -52,7 +60,7 @@ def homeBase(mouse_, liquid_, moves, started):
         print("Your cat gives your face another lick before gracefully jumping off, leaving you in your cold, blanket-less bed.")
         print("NEUTRAL ENDING")
         print("\n\nPlay again..?")
-        print_choices("Yes", "No", "Quit Game", mouse_, liquid_,moves, started)
+        print_choices("Yes", "No", "Quit Game")
         choiceFin = get_user_input()
         if (choiceFin == "a"):
             my_story()
@@ -76,7 +84,7 @@ def homeBase(mouse_, liquid_, moves, started):
 
 def glow(mouse_, liquid_, moves, started):
     """Plays the scene that happens if the user decides to investigate the glow"""
-    print_choices("Investigate the liquid", "Save the mouse", "Leave", mouse_, liquid_, moves, started)
+    checkMoves("Investigate the liquid", "Save the mouse", "Do something else", mouse_, liquid_, moves, started)
 
     choiceB = get_user_input()
     moves = moves + 1
@@ -88,34 +96,43 @@ def glow(mouse_, liquid_, moves, started):
         homeBase(mouse_, liquid_, moves, started)
 
 def liquid(mouse_, liquid_, moves, started):
-    """Plays the scene that happens if the user decides to examine the liquid"""
+    """Plays the scene that happens if the user decides to examine the liquid.
+    Just adds a move if only one gulp of liquid is drunk, but doubles the amount of moves made if more is drunk later"""
+    
     print("\n\n")
     print("The liquid emits a soft glow.")
     print("Despite the appealing appearance of the liquid, the surrounding area is filled with dirt and grime")
     print("Drink the liquid?")
 
-    print_choices("Yes", "No", "Leave", mouse_, liquid_, moves, started)
+    checkMoves("Yes", "No", "Leave", mouse_, liquid_, moves, started)
 
     choiceC = get_user_input()
     moves = moves + 1
-    if(choiceC == "a"):
- 
+    if(choiceC == "a" and not liquid_):
+        moves = moves + 1
         liquid_ = True
         print("The liquid doesn't taste like much of anything.")
         print("You feel mildly more thirsty now, but you feel as if you have made more progress")
+    elif (choiceC == "a"):
+        moves = moves * 2
+        print("You take another gulp of the liquid. You feel rapidly more thirsty than before.")
+              
     glow(mouse_, liquid_, moves, started)
     
 def mouse(mouse_, liquid_, moves, started):
     """Plays the scene that happens if the user decides to save the mouse"""
-    print("\n\n")
-    print("You pick up the mouse and determine that it's the liquid that's causing the asphyxiation")
-    print("You start doing mouse CPR, and before you know it...")
-    print("The mouse lets out a splutter, and lets out a cough as the liquid leaves its system")
-    print("The mouse gets up in your hand and looks up at you gratefully")
-    print("You give it a pet, and the mouse moves to perch on your shoulder")
-    print("Congrats! You have made a friend")
+    if(not mouse_):
+        print("\n\n")
+        print("You pick up the mouse and determine that it's the liquid that's causing the asphyxiation")
+        print("You start doing mouse CPR, and before you know it...")
+        print("The mouse lets out a splutter, and lets out a cough as the liquid leaves its system")
+        print("The mouse gets up in your hand and looks up at you gratefully")
+        print("You give it a pet, and the mouse moves to perch on your shoulder")
+        print("Congrats! You have made a friend")
 
-    mouse_ = True
+        mouse_ = True
+    else:
+        print("You have already saved the mouse.")
 
     glow(mouse_, liquid_, moves, started)
 
@@ -131,14 +148,14 @@ def door(mouse_, liquid_, moves, started):
         print("Congratulations!")
         print("BEST ENDING (Don't tell the good ending I said that...)")
         print("\n\nPlay again..?")
-        print_choices("Yes", "No", "Quit Game", mouse_, liquid_,moves, started)
+        print_choices("Yes", "No", "Quit Game")
         choiceFin = get_user_input()
         if (choiceFin == "a"):
             my_story()
         else:
             quit()
     else:
-        print_choices("Try the handle", "Try breaking through the door", "Knock politely", mouse_, liquid_, moves, started)
+        checkMoves("Try the handle", "Try breaking through the door", "Knock politely", mouse_, liquid_, moves, started)
         choiceD = get_user_input()
         moves = moves + 1
         if(choiceD == "a"):
@@ -162,7 +179,7 @@ def door(mouse_, liquid_, moves, started):
             print("But not any ending-- you have reached the:")
             print("GOOD ENDING")
             print("\n\nPlay again..?")
-            print_choices("Yes", "No", "Quit Game", mouse_, liquid_,moves, started)
+            print_choices("Yes", "No", "Quit Game")
             choiceFin = get_user_input()
             if (choiceFin == "a"):
                 my_story()
@@ -173,6 +190,8 @@ def door(mouse_, liquid_, moves, started):
         
 def my_story():
     homeBase(False, False, 0, False)
+
+
 
 
 
