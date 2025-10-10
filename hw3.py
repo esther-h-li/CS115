@@ -1,0 +1,42 @@
+# === CS 115 Homework 3 ===
+# Fill in your name and the Stevens Honor Code pledge on the following lines.
+# Failure to fill this in will result in deducted marks.
+#
+# Name: Esther Li
+#
+# Pledge: I pledge my honor that I have abided by the Stevens Honor System.
+
+#
+# === CS 115 Homework 3 ===
+
+def empty(m, n):
+    """Creates a grid with m rows and n columns"""
+    if m == 1:
+        return [[0] * n ]
+    else:
+        return [[0] * n ] + empty(m-1, n)
+def copy(grid):
+    """Returns a deep copy of the grid"""
+    if(len(grid) == 0):
+        return []
+    else:
+        return [grid[0].copy()] + copy(grid[1:]) 
+def increase_row(grid, y, cost):
+    """Increases every element in row y by cost"""
+    grid[y] = (list(map(lambda x: x + cost, grid[y])))
+def increase_col(grid, x, cost):
+    """Increases every element in column x by cost"""
+    def add(y):
+        y[x] = y[x] + cost
+    grid = list(map(add, grid))
+def distance_from(grid, x, y):
+    """Calculates the shortest distance from a point (x,y) to (0,0)"""
+   
+    if(x == 0 and y == 0):
+        return grid[x][y]
+    elif(x==0):
+        return grid[x][y] + distance_from(grid, x, y-1)
+    elif(y==0):
+        return grid[x][y] + distance_from(grid, x-1, y)
+    
+    else: return grid[x][y] + min(distance_from(grid, x, y-1),  distance_from(grid, x-1, y))
