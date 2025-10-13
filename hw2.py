@@ -41,7 +41,7 @@ def lookup(letter):
         if letter in tup:
              return True
         return False
-    return list(list(filter(checkLetter, morse))[0])[0] #this takes the large morse tuple to look for the tuple with the letter in it, puts the tupe in the list, then extracts the tuple and turns it into a list, then extracts the first term of that list to get the morse code equivalent.
+    return tuple(filter(checkLetter, morse))[0][0] #filters through the big morse list and adds the tuple with the lettter in it to a big tuple. To get the morse code equivalent, we take tuple with the morse-letter pair(index 0 because it is the only thing in the list), and get the index of the morse code (0 again)
 
 def lookupRev(morseCode):
     """
