@@ -56,7 +56,7 @@ def lookupRev(morseCode):
         return False
     if(len(list(filter(checkMorse, morse))) == 0):
         return "?"
-    return list(list(filter(checkMorse, morse))[0])[1]
+    return tuple(filter(checkMorse, morse))[0][1]
 
 def encode(plaintext):
     """
