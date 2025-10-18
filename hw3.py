@@ -11,10 +11,7 @@
 
 def empty(m, n):
     """Creates a grid with m rows and n columns"""
-    if m == 1:
-        return [[0] * n ]
-    else:
-        return [[0] * n ] + empty(m-1, n)
+    return copy([[0] * n] * m)
 def copy(grid):
     """Returns a deep copy of the grid"""
     if(len(grid) == 0):
@@ -29,14 +26,25 @@ def increase_col(grid, x, cost):
     def add(y):
         y[x] = y[x] + cost
     grid = list(map(add, grid))
+
+memo = {}
 def distance_from(grid, x, y):
     """Calculates the shortest distance from a point (x,y) to (0,0)"""
    
+ 
+    
     if(x == 0 and y == 0):
         return grid[x][y]
-    elif(x==0):
-        return grid[x][y] + distance_from(grid, x, y-1)
-    elif(y==0):
-        return grid[x][y] + distance_from(grid, x-1, y)
     
-    else: return grid[x][y] + min(distance_from(grid, x, y-1),  distance_from(grid, x-1, y))
+    if(not x,y in memo):
+            
+        if(x==0):
+            memo[x,y]= grid[x][y] + distance_from(grid, x, y-1)
+            
+        elif(y==0):
+            memo[x,y]= grid[x][y] + distance_from(grid, x-1, y)
+        
+        else: memo[x,y] = grid[x][y] + min(distance_from(grid, x, y-1),  distance_from(grid, x-1, y))
+    return memo[x,y]
+     
+    
