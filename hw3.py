@@ -14,10 +14,7 @@ def empty(m, n):
     return copy([[0] * n] * m)
 def copy(grid):
     """Returns a deep copy of the grid"""
-    if(len(grid) == 0):
-        return []
-    else:
-        return [grid[0].copy()] + copy(grid[1:]) 
+    return list(map(lambda x: x[:], grid))
 def increase_row(grid, y, cost):
     """Increases every element in row y by cost"""
     grid[y] = (list(map(lambda x: x + cost, grid[y])))
